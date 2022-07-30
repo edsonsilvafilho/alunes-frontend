@@ -17,8 +17,6 @@ export default function Register() {
   );
   const isLoading = useSelector((state) => state.register.isLoading);
 
-  console.log(id, emailStored, nomeStored);
-
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
   const [password, setPassword] = useState('');

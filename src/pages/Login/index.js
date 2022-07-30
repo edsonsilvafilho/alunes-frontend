@@ -12,6 +12,7 @@ import Loading from '../../components/Loading';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordDisplayed, setIsPasswordDisplayed] = useState(false);
   const isLoading = useSelector((state) => state.auth.isLoading);
 
   const dispatch = useDispatch();
@@ -19,6 +20,10 @@ export default function Login() {
   const location = useLocation();
   const prevPath = get(location, 'state.from.pathname', '/');
   const navigate = useNavigate();
+
+  const handleCheckbox = () => {
+    setIsPasswordDisplayed(!isPasswordDisplayed);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,11 +79,19 @@ export default function Login() {
           Senha:
           <input
             id="password"
-            type="password"
+            type={isPasswordDisplayed ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="sua senha"
           />
+        </label>
+        <label htmlFor="cbPassword" className="checkbox">
+          <input
+            type="checkbox"
+            value={isPasswordDisplayed}
+            onClick={handleCheckbox}
+          />
+          Exibir senha
         </label>
         <button type="submit">Efetuar Login</button>
       </Form>

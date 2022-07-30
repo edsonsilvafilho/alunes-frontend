@@ -21,6 +21,16 @@ function* LoginRequest({ payload }) {
   }
 }
 
+function LogoutRequest({ payload }) {
+  axios.defaults.headers.Authorization = '';
+  toast.success('Usuário deslogado com sucesso.', {
+    autoClose: 600,
+    pauseOnHover: false,
+    position: 'bottom-center',
+  });
+  payload.navigate('/', { replace: true });
+}
+
 function persistRehydrate({ payload }) {
   const token = get(payload, 'auth.token', '');
   if (!token) return;
@@ -30,4 +40,5 @@ function persistRehydrate({ payload }) {
 export default all([
   takeLatest(types.LOGIN_REQUEST, LoginRequest),
   takeLatest(types.PERSIST_REHYDRATE, persistRehydrate),
+  takeLatest(types.LOGOUT_REQUEST, LogoutRequest),
 ]);

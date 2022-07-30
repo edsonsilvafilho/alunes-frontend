@@ -12,7 +12,15 @@ export const Form = styled.form`
     margin-bottom: 20px;
   }
 
-  input {
+  label.checkbox {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+
+  input[type='email'],
+  input[type='password'],
+  input[type='text'] {
     height: 40px;
     font-size: 18px;
     border: 1px solid #ddd;
