@@ -1,27 +1,87 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Title, Paragrafo } from './styled';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { get } from 'lodash';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { isEmail } from 'validator';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
-import * as exampleActions from '../../store/modules/example/actions';
+import { Form } from './styled';
+import * as actions from '../../store/modules/auth/actions';
+import Loading from '../../components/Loading';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
   const dispatch = useDispatch();
 
-  function handleClick(e) {
-    e.preventDefault();
+  const location = useLocation();
+  const prevPath = get(location, 'state.from.pathname', '/');
+  const navigate = useNavigate();
 
-    dispatch(exampleActions.clicaBotaoRequest());
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let formErrors = false;
+    if (!isEmail) {
+      formErrors = true;
+      toast.error('E-mail inválido.');
+    }
+
+    if (password === '') {
+      formErrors = true;
+      toast.error('É necessário informar a senha');
+    }
+
+    if (formErrors) return;
+
+    try {
+      dispatch(
+        actions.LoginRequest({
+          email,
+          password,
+          prevPath,
+          navigate,
+        })
+      );
+    } catch (err) {
+      const status = get(err, 'response.status', 0);
+      const errors = get(err, 'response.data.errors', []);
+      if (status === 400) {
+        errors.map((error) => toast.error(error));
+      } else {
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <Container>
-      <Title>
-        Login <small>oiew</small>
-      </Title>
-      <Paragrafo>Lorem aute ad laboris .</Paragrafo>
-      <button type="button" onClick={handleClick}>
-        Enviar
-      </button>
+      <Loading isLoading={isLoading} />
+      <h1>Login</h1>
+      <Form method="post" onSubmit={(e) => handleSubmit(e)}>
+        <label htmlFor="email">
+          E-mail:
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Seu email"
+          />
+        </label>
+        <label htmlFor="password">
+          Senha:
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="sua senha"
+          />
+        </label>
+        <button type="submit">Efetuar Login</button>
+      </Form>
     </Container>
   );
 }
