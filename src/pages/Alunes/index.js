@@ -1,4 +1,3 @@
-/* eslint-disable react/void-dom-elements-no-children */
 import React, { useEffect, useState } from 'react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,7 @@ import {
 import { toast } from 'react-toastify';
 import axios from '../../services/axios';
 import { Container } from '../../styles/GlobalStyles';
-import { AluneContainer, ProfilePicture } from './styled';
+import { AluneContainer, ProfilePicture, NovoAluno } from './styled';
 import Loading from '../../components/Loading';
 import { primaryColor } from '../../config/colors';
 
@@ -57,6 +56,7 @@ export default function Alunes() {
     <Container>
       <Loading isLoading={isLoading} />
       <h1>Alunes</h1>
+      <NovoAluno to="/alune">Cadastrar novo alune</NovoAluno>
       <AluneContainer>
         {alunes.map((alune) => (
           <div key={String(alune.id)}>
