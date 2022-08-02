@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { primaryColor } from '../../config/colors';
 
 export const AluneContainer = styled.div`
   margin-top: 20px;
@@ -17,6 +18,7 @@ export const AluneContainer = styled.div`
 
 export const ProfilePicture = styled.div`
   img {
+    border: 3px solid ${primaryColor};
     width: 36px;
     height: 36px;
     object-fit: contain;

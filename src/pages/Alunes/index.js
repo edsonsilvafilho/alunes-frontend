@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { get } from 'lodash';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FaUserCircle,
   FaEdit,
@@ -17,6 +17,7 @@ import { primaryColor } from '../../config/colors';
 export default function Alunes() {
   const [alunes, setAlunes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     async function getData() {
       setIsLoading(true);
@@ -34,18 +35,19 @@ export default function Alunes() {
     e.currentTarget.remove();
   };
 
-  const handleDeleteAlune = (e, id) => {
+  const handleDeleteAlune = async (e, id) => {
     try {
-      axios.delete(`/alunes/${id}`);
+      await axios.delete(`/alunes/${id}`);
       e.currentTarget.parentElement.remove();
       toast.success('Alune excluíde com sucesso.', {
         autoClose: 600,
         pauseOnHover: false,
       });
     } catch (err) {
-      const status = get(err, 'reponse.status');
+      const status = get(err, 'response.status');
       if (status === 401) {
         toast.error('Você precisa estar logade para excluir um alune');
+        navigate('/login', { replace: true });
       }
     } finally {
       setIsLoading(false);
