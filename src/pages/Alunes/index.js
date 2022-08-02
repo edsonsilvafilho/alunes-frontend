@@ -36,9 +36,10 @@ export default function Alunes() {
   };
 
   const handleDeleteAlune = async (e, id) => {
+    setIsLoading(true);
     try {
       await axios.delete(`/alunes/${id}`);
-      e.currentTarget.parentElement.remove();
+      e.currentTarget.parentElement.parentElement.remove();
       toast.success('Alune excluíde com sucesso.', {
         autoClose: 600,
         pauseOnHover: false,
